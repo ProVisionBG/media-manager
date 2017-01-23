@@ -1,0 +1,38 @@
+{
+  "version": "0.0.1",
+  "name": "provision/media-manager",
+  "description": "ProVision Administration media manager",
+  "keywords": [
+    "provision",
+    "module",
+    "media manager"
+  ],
+  "license": "Apache License 2.0",
+  "authors": [
+    {
+      "name": "Venelin Iliev",
+      "homepage": "http://veneliniliev.com"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/ProVisionBG/media-manager/issues",
+    "source": "https://github.com/ProVisionBG/media-manager"
+  },
+  "homepage": "http://provision.bg",
+  "require": {
+    "provision/administration": "~0.3.0 || dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "ProVision\\MediaManager\\": "."
+    }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "database"
+    ],
+    "psr-4": {
+      "ProVision\\MediaManager\\": "."
+    }
+  }
+}
