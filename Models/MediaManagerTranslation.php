@@ -7,9 +7,9 @@
 
 namespace ProVision\MediaManager;
 
-use Illuminate\Database\Eloquent\Model;
+use ProVision\Administration\AdminModelTranslations;
 
-class MediaManagerTranslation extends Model
+class MediaManagerTranslation extends AdminModelTranslations
 {
 
     protected $fillable = [
@@ -21,24 +21,4 @@ class MediaManagerTranslation extends Model
     protected $casts = [
         'visible' => 'boolean'
     ];
-
-    /**
-     * Customize slug engine.
-     *
-     * @param $engine
-     * @return mixed
-     */
-    public function customizeSlugEngine($engine)
-    {
-        /*
-         * @todo: да го добавя в config
-         */
-        $engine->addRule('ъ', 'a');
-        $engine->addRule('щ', 'sht');
-        $engine->addRule('ь', 'y');
-        $engine->addRule('Ъ', 'A');
-        $engine->addRule('Щ', 'SHT');
-
-        return $engine;
-    }
 }

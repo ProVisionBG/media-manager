@@ -35,7 +35,7 @@ class ModuleServiceProvider extends ServiceProvider
 
         \Form::component('mediaManager', 'media-manager::components.button', [
             'model',
-            'options' => []
+            'config' => []
         ]);
     }
 

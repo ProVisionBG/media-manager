@@ -29,7 +29,6 @@ class MediaManager extends Model
         'visible'
     ];
     public $table = 'media_manager';
-    protected $with = ['translations'];
     protected $appends = ['path'];
 
     protected $casts = [
@@ -77,6 +76,9 @@ class MediaManager extends Model
             }
         }
 
+        /*
+         * merge/replace configs
+         */
         $array = array_replace_recursive([
             'routes' => [
                 'index' => \ProVision\Administration\Administration::route('media-manager.index'),
@@ -99,10 +101,10 @@ class MediaManager extends Model
         return $array;
     }
 
-    /*
-     * quick resize media item
-     */
 
+    /**
+     * @return string
+     */
     public function getPathAttribute()
     {
         $path = 'uploads' . DIRECTORY_SEPARATOR . 'media-manager' . DIRECTORY_SEPARATOR . '' . strtolower(str_ireplace('\\', '-', $this->attributes['mediaable_type']));
@@ -121,6 +123,9 @@ class MediaManager extends Model
         return $path;
     }
 
+    /**
+     * quick resize media item
+     */
     public function quickResize()
     {
         $this->resize($this);
