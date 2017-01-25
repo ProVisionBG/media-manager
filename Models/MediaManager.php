@@ -9,6 +9,7 @@ namespace ProVision\MediaManager;
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Lang;
 use ProVision\MediaManager\Traits\MediaManagerTrait;
 
@@ -65,6 +66,16 @@ class MediaManager extends Model
      */
     public static function config($config = [], $return = 'json')
     {
+
+        /*
+         * Relation::morphMap fix
+         */
+        if (!empty($config['filters']['mediaable_type'])) {
+            $type = array_search($config['filters']['mediaable_type'], Relation::morphMap());
+            if ($type) {
+                $config['filters']['mediaable_type'] = $type;
+            }
+        }
 
         $array = array_replace_recursive([
             'routes' => [
