@@ -21,7 +21,7 @@ class CreateMediaManagerTable extends Migration
             $table->string('mediaable_sub_type')->index()->nullable()->default(null);
             $table->integer('mediaable_id')->unsigned()->index();
 
-            $table->integer('user_id')->unsigned()->index()->comment('Кой е качил файла');
+            $table->integer('user_id')->nullable()->unsigned()->index()->comment('Кой е качил файла');
 
             $table->string('file')->nullable()->default(null);
             $table->string('mime_type')->nullable()->default(null)->index();
