@@ -66,7 +66,7 @@ class MediaManager extends Model
     public static function config($config = [], $return = 'json')
     {
 
-        $array = array_merge([
+        $array = array_replace_recursive([
             'routes' => [
                 'index' => \ProVision\Administration\Administration::route('media-manager.index'),
                 //'store' => \ProVision\Administration\Administration::route('media-manager.store'),
