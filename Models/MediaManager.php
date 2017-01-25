@@ -73,7 +73,12 @@ class MediaManager extends Model
                 //'destroy' => \ProVision\Administration\Administration::route('media-manager.destroy', [0]),
             ],
             'lang' => Lang::get('media-manager::admin'),
-            'languages' => \ProVision\Administration\Administration::getLanguages()
+            'languages' => \ProVision\Administration\Administration::getLanguages(),
+            'button' => [
+                'title' => trans('media-manager::admin.button_title'),
+                'class' => 'btn-warning',
+                'icon' => 'picture-o'
+            ]
         ], $config);
 
         if ($return == 'json') {
