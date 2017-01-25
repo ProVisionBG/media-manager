@@ -66,7 +66,7 @@ class MediaManager extends Model
     public static function config($config = [], $return = 'json')
     {
 
-        $array = array_merge($config, [
+        $array = array_merge_recursive([
             'routes' => [
                 'index' => \ProVision\Administration\Administration::route('media-manager.index'),
                 //'store' => \ProVision\Administration\Administration::route('media-manager.store'),
@@ -74,7 +74,7 @@ class MediaManager extends Model
             ],
             'lang' => Lang::get('media-manager::admin'),
             'languages' => \ProVision\Administration\Administration::getLanguages()
-        ]);
+        ], $config);
 
         if ($return == 'json') {
             return json_encode($array);
