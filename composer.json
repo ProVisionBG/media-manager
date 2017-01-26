@@ -1,5 +1,4 @@
 {
-  "version": "0.0.5",
   "name": "provision/media-manager",
   "description": "ProVision Administration media manager",
   "keywords": [
@@ -20,7 +19,7 @@
   },
   "homepage": "http://provision.bg",
   "require": {
-    "provision/administration": ">=0.4"
+    "provision/administration": "^0.4"
   },
   "autoload": {
     "psr-4": {
