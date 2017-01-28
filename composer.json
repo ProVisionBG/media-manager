@@ -19,7 +19,6 @@
   },
   "homepage": "http://provision.bg",
   "require": {
-    "provision/administration": "^0.4"
   },
   "autoload": {
     "psr-4": {
