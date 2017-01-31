@@ -7,6 +7,7 @@
 
 namespace ProVision\MediaManager\Traits;
 
+use Illuminate\Database\Eloquent\Relations\Relation;
 use ProVision\MediaManager\MediaManager;
 
 trait MediaManagerTrait
@@ -14,7 +15,7 @@ trait MediaManagerTrait
     /**
      * boot trait.
      */
-    public static function bootMediaTrait()
+    public static function bootMediaManagerTrait()
     {
         static::deleting(function ($model) {
             /*
@@ -23,18 +24,9 @@ trait MediaManagerTrait
             $traits = class_uses($model);
 
             if (in_array('Illuminate\\Database\\Eloquent\\SoftDeletes', $traits)) {
-                // Model uses soft deletes - NOT DELETE ATTACHED FILES
+                // Model uses soft deletes - DON'T DELETE ATTACHED FILES
             } else {
-                $q = MediaManager::where('module', $model->module)
-                    ->where('item_id', $model->id);
-
-                if (!empty($model->sub_module)) {
-                    $q->where('sub_module', $model->sub_module);
-                } else {
-                    $q->where('sub_module', '=', '');
-                }
-
-                $mediaItems = $q->get();
+                $mediaItems = $model->media()->get();
 
                 if (!$mediaItems->isEmpty()) {
                     foreach ($mediaItems as $mediaItem) {
@@ -140,5 +132,27 @@ trait MediaManagerTrait
         }
 
         return $relation;
+    }
+
+    /**
+     * Relation::morphMap map
+     *
+     * @param Model $object | string
+     * @return string
+     */
+    public function getMediaableType($object)
+    {
+        if (is_object($object)) {
+            $class = class_basename($object);
+        } else {
+            $class = $object;
+        }
+
+        $type = array_search($class, Relation::morphMap());
+        if ($type) {
+            return $type;
+        }
+
+        return $class;
     }
 }
