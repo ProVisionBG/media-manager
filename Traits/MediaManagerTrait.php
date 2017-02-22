@@ -103,6 +103,7 @@ trait MediaManagerTrait
             $mode = $size['mode'];
 
             //make resize
+            $imageMake = \Intervention\Image\Facades\Image::make($file);
             $imageMake->$mode($size['width'], $size['height'], function ($c) use ($size) {
                 if (!empty($size['aspectRatio']) && $size['aspectRatio'] === true) {
                     $c->aspectRatio();
@@ -162,6 +163,7 @@ trait MediaManagerTrait
             $mode = $size['mode'];
 
             //make resize
+            $imageMake = \Intervention\Image\Facades\Image::make($file);
             $imageMake->$mode($size['width'], $size['height'], function ($c) use ($size) {
                 if (!empty($size['aspectRatio']) && $size['aspectRatio'] === true) {
                     $c->aspectRatio();
