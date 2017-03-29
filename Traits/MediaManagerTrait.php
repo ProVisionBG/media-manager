@@ -8,7 +8,7 @@
 namespace ProVision\MediaManager\Traits;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
-use ProVision\MediaManager\MediaManager;
+use ProVision\MediaManager\Models\MediaManager;
 
 trait MediaManagerTrait
 {

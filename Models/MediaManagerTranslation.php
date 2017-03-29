@@ -5,7 +5,7 @@
  * Author: Venelin Iliev, http://veneliniliev.com
  */
 
-namespace ProVision\MediaManager;
+namespace ProVision\MediaManager\Models;
 
 use ProVision\Administration\AdminModelTranslations;
 

@@ -14,7 +14,7 @@ use Kris\LaravelFormBuilder\FormBuilder;
 use ProVision\Administration\Http\Controllers\BaseAdministrationController;
 use ProVision\MediaManager\Forms\ItemForm;
 use ProVision\MediaManager\Http\Requests\IndexRequest;
-use ProVision\MediaManager\MediaManager;
+use ProVision\MediaManager\Models\MediaManager;
 use Response;
 
 class MediaManagerController extends BaseAdministrationController
