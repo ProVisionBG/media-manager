@@ -82,6 +82,6 @@ class MediaManager extends Model
      */
     public function quickResize()
     {
-        $this->resize($this);
+        return $this->resize($this);
     }
 }

@@ -9,6 +9,7 @@ namespace ProVision\MediaManager\Providers;
 
 use Caffeinated\Modules\Support\ServiceProvider;
 use ProVision\MediaManager\Administration;
+use ProVision\MediaManager\Console\Commands\MediaResize;
 
 class ModuleServiceProvider extends ServiceProvider
 {
@@ -46,6 +47,10 @@ class ModuleServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->commands([
+            MediaResize::class
+        ]);
+
         //$this->app->register(RouteServiceProvider::class);
     }
 }

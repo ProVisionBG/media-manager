@@ -8,6 +8,7 @@
 namespace ProVision\MediaManager\Traits;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\File;
 use ProVision\MediaManager\Models\MediaManager;
 
 trait MediaManagerTrait
@@ -43,17 +44,17 @@ trait MediaManagerTrait
     /**
      * Resize image.
      *
-     * @param $file
+     * @param MediaManager $media
      * @return bool
      */
     public function resize(MediaManager $media)
     {
 
-        $file = $media->path . $media->file;
+        $file = public_path($media->path . $media->file);
         /*
          * exists?
          */
-        if (!\File::exists($file)) {
+        if (!File::exists($file)) {
             return false;
         }
 
