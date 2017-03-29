@@ -42,30 +42,31 @@ class MediaResize extends Command
      */
     public function handle()
     {
-        MediaManager::chunk(100, function ($media) {
-            foreach ($media as $m) {
+        MediaManager::where('is_image', 1)
+            ->chunk(100, function ($media) {
+                foreach ($media as $m) {
 
-                /*
-                 * remove old sizes
-                 */
-                $filesInDirectory = File::files(realpath(public_path($m->path)));
-                if (!empty($filesInDirectory)) {
-                    foreach ($filesInDirectory as $file) {
-                        //дали е размер или оригинал? - запазваме оригинала
-                        if (strstr(basename($file), '_')) {
-                            File::delete($file);
+                    /*
+                     * remove old sizes
+                     */
+                    $filesInDirectory = File::files(realpath(public_path($m->path)));
+                    if (!empty($filesInDirectory)) {
+                        foreach ($filesInDirectory as $file) {
+                            //дали е размер или оригинал? - запазваме оригинала
+                            if (strstr(basename($file), '_')) {
+                                File::delete($file);
+                            }
                         }
                     }
+
+                    /*
+                     * make new sizes
+                     */
+                    $m->quickResize();
+
+                    $this->info('#' . $m->id . ': resized');
                 }
-
-                /*
-                 * make new sizes
-                 */
-                $m->quickResize();
-
-                $this->info('#' . $m->id . ': resized');
-            }
-        });
+            });
 
         $this->info($this->signature . ' END');
     }
