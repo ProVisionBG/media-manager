@@ -35,7 +35,7 @@ class CreateMediaManagerTable extends Migration
         Schema::create('media_manager_translations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('media_manager_id')->unsigned()->index();
-            $table->string('title');
+            $table->string('title')->nullable()->default(null);
             $table->longText('description')->nullable()->default(null);
             $table->string('locale')->index();
             $table->boolean('visible')->default(true)->index();
