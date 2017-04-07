@@ -35,8 +35,8 @@ class Administration implements Module
      * @param Form $form
      * @return mixed
      */
-//    public function settings($module, Form $form)
-//    {
-//        // TODO: Implement settings() method.
-//    }
+    public function settings($module, Form $form)
+    {
+        // TODO: Implement settings() method.
+    }
 }
