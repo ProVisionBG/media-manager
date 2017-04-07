@@ -29,6 +29,10 @@ class MediaManager extends Model
     public $table = 'media_manager';
     protected $appends = ['path'];
 
+    protected $with = [
+        'translations'
+    ];
+
     protected $casts = [
         'is_image' => 'boolean'
     ];
