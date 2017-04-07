@@ -36,6 +36,8 @@ class MediaManagerController extends BaseAdministrationController
 
         if ($request->has('mediaable_sub_type')) {
             $mediaQuery->where('mediaable_sub_type', $request->mediaable_sub_type);
+        } else {
+            $mediaQuery->whereNull('mediaable_sub_type');
         }
 
         if ($request->has('mediaable_id')) {

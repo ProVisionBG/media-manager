@@ -181,16 +181,19 @@ trait MediaManagerTrait
     /**
      * Media relation.
      *
+     * @param bool $sub
      * @return mixed
      */
-    public function media($sub = null)
+    public function media($sub = false)
     {
 
         $relation = $this->morphMany(MediaManager::class, 'mediaable')
             ->orderBy('order_index', 'asc');
 
-        if ($sub != null) {
+        if ($sub) {
             $relation->where('mediaable_sub_type', $sub);
+        } else {
+            $relation->whereNull('mediaable_sub_type');
         }
 
         return $relation;
