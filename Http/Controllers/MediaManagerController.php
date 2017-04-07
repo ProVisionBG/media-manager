@@ -14,6 +14,7 @@ use Kris\LaravelFormBuilder\FormBuilder;
 use ProVision\Administration\Http\Controllers\BaseAdministrationController;
 use ProVision\MediaManager\Forms\ItemForm;
 use ProVision\MediaManager\Http\Requests\IndexRequest;
+use ProVision\MediaManager\Http\Requests\StoreRequest;
 use ProVision\MediaManager\Models\MediaManager;
 use Response;
 
@@ -62,10 +63,10 @@ class MediaManagerController extends BaseAdministrationController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request|StoreRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $file = $request->file('file');
 
@@ -82,7 +83,7 @@ class MediaManagerController extends BaseAdministrationController
         $media->mediaable_type = $request->mediaable_type;
         $media->user_id = Auth::guard(Config::get('provision_administration.guard'))->user()->id;
 
-        if ($request->has('mediaable_sub_type') && !empty($request->input('mediaable_sub_type'))) {
+        if ($request->has('mediaable_sub_type') && !empty($request->mediaable_sub_type)) {
             $media->mediaable_sub_type = $request->mediaable_sub_type;
         }
 

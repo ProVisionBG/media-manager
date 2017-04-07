@@ -3,6 +3,8 @@
 namespace ProVision\MediaManager\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class StoreRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::guard(Config::get('provision_administration.guard'))->check();
     }
 
     /**
@@ -25,7 +27,8 @@ class StoreRequest extends FormRequest
     {
         return [
             'mediaable_id' => 'required|integer',
-            'mediaable_type' => 'required'
+            'mediaable_type' => 'string',
+            'file' => 'file'
         ];
     }
 }
