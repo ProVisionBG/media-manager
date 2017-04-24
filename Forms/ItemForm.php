@@ -24,6 +24,11 @@ class ItemForm extends AdminForm
             'translate' => true,
         ]);
 
+        $this->add('link', 'text', [
+            'label' => trans('media-manager::admin.edit-form.link'),
+            'translate' => true,
+        ]);
+
         $this->add('visible', 'checkbox', [
             'label' => trans('media-manager::admin.edit-form.visible'),
             'value' => 1,

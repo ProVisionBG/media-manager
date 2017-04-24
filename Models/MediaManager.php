@@ -24,7 +24,8 @@ class MediaManager extends Model
     public $translatedAttributes = [
         'title',
         'description',
-        'visible'
+        'visible',
+        'link'
     ];
     public $table = 'media_manager';
     protected $appends = ['path'];

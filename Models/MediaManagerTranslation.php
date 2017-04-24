@@ -15,7 +15,8 @@ class MediaManagerTranslation extends AdminModelTranslations
     protected $fillable = [
         'title',
         'description',
-        'visible'
+        'visible',
+        'link'
     ];
 
     protected $casts = [
