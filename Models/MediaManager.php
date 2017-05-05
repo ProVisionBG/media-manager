@@ -83,15 +83,15 @@ class MediaManager extends Model
     }
 
     /**
-     * Връща пълният пътя до картинката
+     * Връща пълният път до файла - ако е картинка може да се подаде и размер
      *
-     * @param bool $size
+     * @param string $size
      * @return string
      */
     public function getPublicPath($size = false)
     {
         $path = str_ireplace('\\', '/', $this->path);
-        if ($size) {
+        if ($size && $this->is_image) {
             $path .= $size . '_';
         }
 
