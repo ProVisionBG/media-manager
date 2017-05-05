@@ -83,6 +83,22 @@ class MediaManager extends Model
     }
 
     /**
+     * Връща пълният пътя до картинката
+     *
+     * @param bool $size
+     * @return string
+     */
+    public function getPublicPath($size = false)
+    {
+        $path = str_ireplace('\\', '/', $this->path);
+        if ($size) {
+            $path .= $size . '_';
+        }
+
+        return asset($path . $this->file);
+    }
+
+    /**
      * quick resize media item
      */
     public function quickResize()

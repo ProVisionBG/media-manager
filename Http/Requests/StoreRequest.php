@@ -27,7 +27,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'mediaable_id' => 'required|integer',
-            'mediaable_type' => 'string',
+            'mediaable_type' => 'required|string',
             'file' => 'file'
         ];
     }
