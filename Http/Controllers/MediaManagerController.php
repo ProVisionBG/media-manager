@@ -212,10 +212,8 @@ class MediaManagerController extends BaseAdministrationController
 
                 //set visible  = false if unset
                 foreach ($data as $locale => $value) {
-                    if (!isset($data[$locale]['visible'])) {
+                    if (!isset($data[$locale]['visible']) || empty($data[$locale]['visible'])) {
                         $data[$locale]['visible'] = false;
-                    } else {
-                        $data[$locale]['visible'] = true;
                     }
                 }
 
