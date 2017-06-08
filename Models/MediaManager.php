@@ -92,7 +92,11 @@ class MediaManager extends Model
     {
         $path = str_ireplace('\\', '/', $this->path);
         if ($size && $this->is_image) {
-            $path .= $size . '_';
+            if ($size == '_') {
+                $path .= '_';
+            } else {
+                $path .= $size . '_';
+            }
         }
 
         return asset($path . $this->file);
