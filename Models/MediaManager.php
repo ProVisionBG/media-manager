@@ -69,7 +69,7 @@ class MediaManager extends Model {
             /**
              * Сваляне на файл - ако бъде подаден като ->file = url
              */
-            if (filter_var($model->file, FILTER_VALIDATE_URL)) {
+            if (filter_var($model->file, FILTER_VALIDATE_URL) || file_exists($model->file)) {
                 $contents = file_get_contents($model->file);
                 $fileSavePath = public_path($model->path . basename($model->file));
                 File::put($fileSavePath, $contents);
