@@ -28,7 +28,9 @@ class MediaManager extends Model {
         'link'
     ];
     public $table = 'media_manager';
-    protected $appends = ['path'];
+    protected $appends = [
+        'path'
+    ];
 
     protected $with = [
         'translations'
