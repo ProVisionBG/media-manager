@@ -32,5 +32,14 @@
     "psr-4": {
       "ProVision\\MediaManager\\": "."
     }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "ProVision\\MediaManager\\Providers\\ModuleServiceProvider"
+      ],
+      "aliases": {
+      }
+    }
   }
 }
