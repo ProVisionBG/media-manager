@@ -71,7 +71,27 @@ class MediaManager extends Model {
             /**
              * Сваляне на файл - ако бъде подаден като ->file = url
              */
-            if (filter_var($model->file, FILTER_VALIDATE_URL) || file_exists($model->file)) {
+            if (filter_var($model->file, FILTER_VALIDATE_URL)) {
+
+                /*
+                 * Сваляне на файла с cURL
+                 */
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $model->file);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+                $contents = curl_exec($ch);
+                curl_close($ch);
+
+                $fileSavePath = public_path($model->path . basename($model->file));
+                File::put($fileSavePath, $contents);
+                $model->file = basename($fileSavePath);
+                $model->save();
+                $model->quickResize();
+            } elseif (file_exists($model->file)) {
+                /**
+                 * Ако файла е локален
+                 */
                 $contents = file_get_contents($model->file);
                 $fileSavePath = public_path($model->path . basename($model->file));
                 File::put($fileSavePath, $contents);
