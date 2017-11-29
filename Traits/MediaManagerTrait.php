@@ -47,7 +47,8 @@ trait MediaManagerTrait {
      */
     public function resize(MediaManager $media) {
 
-        $file = public_path($media->path . $media->file);
+        $file = $media->path . DIRECTORY_SEPARATOR . $media->file;
+
         /*
          * exists?
          */
@@ -55,11 +56,13 @@ trait MediaManagerTrait {
             return false;
         }
 
+        $imageContent = $media->storageDisk->get($file);
+
         /*
          * Дали е картинка?
          */
         try {
-            $imageMake = \Intervention\Image\Facades\Image::make($file);
+            $imageMake = \Intervention\Image\Facades\Image::make($imageContent);
             if (!$media->is_image) {
                 $media->is_image = true;
                 $media->save();
@@ -73,10 +76,11 @@ trait MediaManagerTrait {
         }
 
         //_ - default image size for administration preview
-        $imageMake->fit(100, 100, function ($c) {
+        $image = $imageMake->fit(100, 100, function ($c) {
             $c->aspectRatio();
             $c->upsize();
-        })->save(dirname($file) . DIRECTORY_SEPARATOR . '_' . basename($file));
+        })->stream('jpg', 90);
+        $media->storageDisk->put($media->path . DIRECTORY_SEPARATOR . '_' . basename($file), $image->getContents());
 
         $sizes = config('provision_administration.image_sizes');
 
@@ -101,15 +105,17 @@ trait MediaManagerTrait {
             $mode = $size['mode'];
 
             //make resize
-            $imageMake = \Intervention\Image\Facades\Image::make($file);
-            $imageMake->$mode($size['width'], $size['height'], function ($c) use ($size) {
+            $imageMake = \Intervention\Image\Facades\Image::make($imageContent);
+            $imageResized = $imageMake->$mode($size['width'], $size['height'], function ($c) use ($size) {
                 if (!empty($size['aspectRatio']) && $size['aspectRatio'] === true) {
                     $c->aspectRatio();
                 }
                 if (!empty($size['upsize']) && $size['upsize'] === true) {
                     $c->upsize();
                 }
-            })->save(dirname($file) . DIRECTORY_SEPARATOR . $key . '_' . basename($file));
+            })->stream('jpg', 90);
+
+            $media->storageDisk->put($media->path . DIRECTORY_SEPARATOR . $key . '_' . basename($file), $imageResized->getContents());
         }
 
         return true;

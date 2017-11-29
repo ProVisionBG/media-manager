@@ -6,7 +6,7 @@
 
     <div class="img">
         @if($item->is_image)
-            <img title="{{$item->file}}" src="{{asset($item->path.'_'.$item->file)}}"/>
+            <img title="{{$item->file}}" src="{{$item->getPublicPath('_')}}"/>
         @else
             <div class="file-icon file-icon-xl" title="{{$item->file}}"
                  data-type="{{\File::extension($item->file)}}"></div>
@@ -24,7 +24,7 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="{{asset($item->path.$item->file)}}" download="{{$item->file}}"><i
+                <li><a href="{{$item->getPublicPath()}}" download="{{$item->file}}"><i
                                 class="fa fa-download"></i> Свали файла</a></li>
                 {{--<li><a href="#"><i class="fa fa-pencil-square-o"></i> Редактирай</a></li>--}}
                 <li><a href="#" class="file-rename"><i class="fa fa-pencil-square-o"></i> Преименувай файла</a></li>

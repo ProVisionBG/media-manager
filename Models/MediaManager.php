@@ -133,7 +133,7 @@ class MediaManager extends Model {
      * @return string
      */
     public function getPathAttribute() {
-        $path = 'uploads' . DIRECTORY_SEPARATOR . 'media-manager' . DIRECTORY_SEPARATOR . '' . strtolower(str_ireplace('\\', '-', $this->attributes['mediaable_type']));
+        $path = 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'media-manager' . DIRECTORY_SEPARATOR . '' . strtolower(str_ireplace('\\', '-', $this->attributes['mediaable_type']));
 
         //mediaable_sub_type
         if (!empty($this->attributes['mediaable_sub_type'])) {
