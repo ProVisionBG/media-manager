@@ -11,15 +11,13 @@ use Caffeinated\Modules\Support\ServiceProvider;
 use ProVision\MediaManager\Administration;
 use ProVision\MediaManager\Console\Commands\MediaResize;
 
-class ModuleServiceProvider extends ServiceProvider
-{
+class ModuleServiceProvider extends ServiceProvider {
     /**
      * Bootstrap the module services.
      *
      * @return void
      */
-    public function boot()
-    {
+    public function boot() {
         $this->loadTranslationsFrom(__DIR__ . '/../Resources/Lang', 'media-manager');
 
         $this->publishes([
@@ -31,6 +29,10 @@ class ModuleServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../Public' => public_path('vendor/provision/media-manager'),
         ], 'public');
+
+        $this->publishes([
+            __DIR__ . '/Config/media-manager.php' => config_path('media-manager.php'),
+        ], 'config');
 
         \ProVision\Administration\Administration::bootModule('media-manager', Administration::class);
 
@@ -45,8 +47,12 @@ class ModuleServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
+    public function register() {
+
+        $this->mergeConfigFrom(
+            __DIR__ . '../Config/media-manager.php', 'media-manager'
+        );
+
         $this->commands([
             MediaResize::class
         ]);
