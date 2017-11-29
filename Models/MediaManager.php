@@ -62,11 +62,18 @@ class MediaManager extends Model {
     }
 
     public static function boot() {
+
         static::deleting(function ($model) {
-            /*
-             * automatic remove files
-             */
+
             $disk = Storage::disk(config('media-manager.default_file_system_disk'));
+
+            /**
+             * Изтрива файловете 1 по 1 - за GCS
+             */
+            if ($files = $disk->files($model->path)) {
+                $disk->delete($files);
+                $disk->deleteDirectory($model->path);
+            }
 
             if ($disk->exists($model->path)) {
                 $disk->deleteDirectory($model->path);
