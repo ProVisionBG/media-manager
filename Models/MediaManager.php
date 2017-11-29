@@ -67,9 +67,11 @@ class MediaManager extends Model {
              * automatic remove files
              */
             $disk = Storage::disk(config('media-manager.default_file_system_disk'));
+
             if ($disk->exists($model->path)) {
-                $disk->deleteDirectory(public_path($model->path));
+                $disk->deleteDirectory($model->path);
             }
+
         });
 
         static::saving(function ($model) {
@@ -106,7 +108,7 @@ class MediaManager extends Model {
                 $contents = curl_exec($ch);
                 curl_close($ch);
 
-                $fileSavePath = public_path($model->path . basename($model->file));
+                $fileSavePath = $model->path . basename($model->file);
                 $disk->put($fileSavePath, $contents);
                 $model->file = basename($fileSavePath);
                 $model->save();
@@ -116,7 +118,7 @@ class MediaManager extends Model {
                  * Ако файла е локален
                  */
                 $contents = file_get_contents($model->file);
-                $fileSavePath = public_path($model->path . basename($model->file));
+                $fileSavePath = $model->path . basename($model->file);
                 $disk->put($fileSavePath, $contents);
                 $model->file = basename($fileSavePath);
                 $model->save();

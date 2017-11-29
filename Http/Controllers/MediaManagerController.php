@@ -90,7 +90,7 @@ class MediaManagerController extends BaseAdministrationController {
         $pathInfo = pathinfo($file->getClientOriginalName());
         $newFileName = str_slug($pathInfo['filename']) . '.' . $pathInfo['extension'];
 
-        $file->move($media->path, $newFileName);
+        $media->storageDisk->put($media->path . DIRECTORY_SEPARATOR . $newFileName, $file);
 
         $media->file = $newFileName;
         $media->mime_type = $media->storageDisk->mimeType($media->path . $media->file);
