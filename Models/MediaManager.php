@@ -9,7 +9,8 @@ namespace ProVision\MediaManager\Models;
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\File;
+use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\Storage;
 use ProVision\MediaManager\Traits\MediaManagerTrait;
 
 class MediaManager extends Model {
@@ -28,44 +29,66 @@ class MediaManager extends Model {
         'link'
     ];
     public $table = 'media_manager';
+
+    /**
+     * @var FilesystemAdapter
+     */
+    public $storageDisk;
+
     protected $appends = [
         'path'
     ];
-
     protected $with = [
         'translations'
     ];
-
     protected $casts = [
         'is_image' => 'boolean'
     ];
+
+    public function __construct(array $attributes = []) {
+        parent::__construct($attributes);
+
+        $this->setStorageDisk();
+    }
+
+    /**
+     * @param string $disk
+     */
+    public function setStorageDisk($disk = null) {
+        if (empty($disk)) {
+            $disk = config('media-manager.default_file_system_disk');
+        }
+        $this->storageDisk = Storage::disk($disk);
+    }
 
     public static function boot() {
         static::deleting(function ($model) {
             /*
              * automatic remove files
              */
-            if (File::exists(public_path($model->path))) {
-                File::deleteDirectory(public_path($model->path));
+            $disk = Storage::disk(config('media-manager.default_file_system_disk'));
+            if ($disk->exists($model->path)) {
+                $disk->deleteDirectory(public_path($model->path));
             }
         });
 
         static::saving(function ($model) {
             if ($model->id) {
                 //automatic create directories structure
-                if (!File::exists(public_path($model->path))) {
-                    File::makeDirectory(public_path($model->path), 0775, true, true);
+                $disk = Storage::disk(config('media-manager.default_file_system_disk'));
+                if (!$disk->exists($model->path)) {
+                    $disk->makeDirectory($model->path);
                 }
-
-
             }
         });
 
         static::saved(function ($model) {
 
+            $disk = Storage::disk(config('media-manager.default_file_system_disk'));
+
             //automatic create directories structure
-            if (!File::exists(public_path($model->path))) {
-                File::makeDirectory(public_path($model->path), 0775, true, true);
+            if (!$disk->exists($model->path)) {
+                $disk->makeDirectory($model->path);
             }
 
             /**
@@ -84,7 +107,7 @@ class MediaManager extends Model {
                 curl_close($ch);
 
                 $fileSavePath = public_path($model->path . basename($model->file));
-                File::put($fileSavePath, $contents);
+                $disk->put($fileSavePath, $contents);
                 $model->file = basename($fileSavePath);
                 $model->save();
                 $model->quickResize();
@@ -94,7 +117,7 @@ class MediaManager extends Model {
                  */
                 $contents = file_get_contents($model->file);
                 $fileSavePath = public_path($model->path . basename($model->file));
-                File::put($fileSavePath, $contents);
+                $disk->put($fileSavePath, $contents);
                 $model->file = basename($fileSavePath);
                 $model->save();
                 $model->quickResize();
@@ -127,7 +150,7 @@ class MediaManager extends Model {
     /**
      * Връща пълният път до файла - ако е картинка може да се подаде и размер
      *
-     * @param string $size
+     * @param bool|string $size
      *
      * @return string
      */

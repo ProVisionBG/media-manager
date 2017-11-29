@@ -11,8 +11,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use ProVision\MediaManager\Models\MediaManager;
 
-class MediaResize extends Command
-{
+class MediaResize extends Command {
     /**
      * Name of the command.
      *
@@ -27,8 +26,7 @@ class MediaResize extends Command
      */
     protected $description = 'Resize items in MediaManager';
 
-    public function __construct()
-    {
+    public function __construct() {
         /*
         * command fix
         */
@@ -40,8 +38,7 @@ class MediaResize extends Command
     /**
      * Run the package migrations.
      */
-    public function handle()
-    {
+    public function handle() {
         MediaManager::where('is_image', 1)
             ->chunk(100, function ($media) {
                 foreach ($media as $m) {
@@ -49,12 +46,12 @@ class MediaResize extends Command
                     /*
                      * remove old sizes
                      */
-                    $filesInDirectory = File::files(realpath(public_path($m->path)));
+                    $filesInDirectory = $media->storageDisk->files(realpath($m->path));
                     if (!empty($filesInDirectory)) {
                         foreach ($filesInDirectory as $file) {
                             //дали е размер или оригинал? - запазваме оригинала
                             if (strstr(basename($file), '_')) {
-                                File::delete($file);
+                                $media->storageDisk->delete($file);
                             }
                         }
                     }

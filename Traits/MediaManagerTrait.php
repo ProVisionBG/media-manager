@@ -8,16 +8,13 @@
 namespace ProVision\MediaManager\Traits;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Facades\File;
 use ProVision\MediaManager\Models\MediaManager;
 
-trait MediaManagerTrait
-{
+trait MediaManagerTrait {
     /**
      * boot trait.
      */
-    public static function bootMediaManagerTrait()
-    {
+    public static function bootMediaManagerTrait() {
         static::deleting(function ($model) {
             /*
              * Ако модела не използва Soft Deleting изтриваме прикачените към него файлове!
@@ -45,16 +42,16 @@ trait MediaManagerTrait
      * Resize image.
      *
      * @param MediaManager $media
+     *
      * @return bool
      */
-    public function resize(MediaManager $media)
-    {
+    public function resize(MediaManager $media) {
 
         $file = public_path($media->path . $media->file);
         /*
          * exists?
          */
-        if (!File::exists($file)) {
+        if (!$media->storageDisk->exists($file)) {
             return false;
         }
 
@@ -121,11 +118,12 @@ trait MediaManagerTrait
 
     /**
      * Оразмерява файл
+     *
      * @param $file
+     *
      * @return bool
      */
-    public function resizeFile($file)
-    {
+    public function resizeFile($file) {
         /*
         * Дали е картинка?
         */
@@ -182,10 +180,10 @@ trait MediaManagerTrait
      * Media relation.
      *
      * @param bool $sub
+     *
      * @return mixed
      */
-    public function media($sub = false)
-    {
+    public function media($sub = false) {
 
         $relation = $this->morphMany(MediaManager::class, 'mediaable')
             ->orderBy('order_index', 'asc');
@@ -203,10 +201,10 @@ trait MediaManagerTrait
      * Relation::morphMap map
      *
      * @param Model $object | string
+     *
      * @return string
      */
-    public function getMediaableType($object)
-    {
+    public function getMediaableType($object) {
         if (is_object($object)) {
             $class = class_basename($object);
         } else {

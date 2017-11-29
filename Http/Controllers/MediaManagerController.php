@@ -18,16 +18,15 @@ use ProVision\MediaManager\Http\Requests\StoreRequest;
 use ProVision\MediaManager\Models\MediaManager;
 use Response;
 
-class MediaManagerController extends BaseAdministrationController
-{
+class MediaManagerController extends BaseAdministrationController {
     /**
      * Display a listing of the resource.
      *
      * @param IndexRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index(IndexRequest $request)
-    {
+    public function index(IndexRequest $request) {
 
         $mediaQuery = MediaManager::whereNotNull('id');
 
@@ -55,8 +54,7 @@ class MediaManagerController extends BaseAdministrationController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
@@ -64,10 +62,10 @@ class MediaManagerController extends BaseAdministrationController
      * Store a newly created resource in storage.
      *
      * @param Request|StoreRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request)
-    {
+    public function store(StoreRequest $request) {
         $file = $request->file('file');
 
         if (!$file) {
@@ -95,7 +93,7 @@ class MediaManagerController extends BaseAdministrationController
         $file->move($media->path, $newFileName);
 
         $media->file = $newFileName;
-        $media->mime_type = \File::mimeType($media->path . $media->file);
+        $media->mime_type = $media->storageDisk->mimeType($media->path . $media->file);
 
         $media->save();
 
@@ -108,10 +106,10 @@ class MediaManagerController extends BaseAdministrationController
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         $media = MediaManager::findOrFail($id);
         return view('media-manager::item', ['item' => $media]);
     }
@@ -120,10 +118,10 @@ class MediaManagerController extends BaseAdministrationController
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, FormBuilder $formBuilder)
-    {
+    public function edit($id, FormBuilder $formBuilder) {
         $media = MediaManager::findOrFail($id);
         $form = $formBuilder->create(ItemForm::class, [
                 'method' => 'PUT',
@@ -140,11 +138,11 @@ class MediaManagerController extends BaseAdministrationController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         if ($request->has('type')) {
             if ($request->input('type') == 'sort') {
                 /*
@@ -183,16 +181,16 @@ class MediaManagerController extends BaseAdministrationController
 
                 $media = MediaManager::findOrFail($id);
 
-                $files = \File::files($media->path);
+                $files = $media->storageDisk->files($media->path);
                 if ($files) {
                     //remove cached files
                     foreach ($files as $file) {
                         if (realpath($file) != realpath($media->path . $media->file)) {
-                            \File::delete($file);
+                            $media->storageDisk->delete($file);
                         }
                     }
                     //rename original file
-                    \File::move(realpath($media->path . $media->file), $media->path . $newFileName);
+                    $media->storageDisk->move(realpath($media->path . $media->file), $media->path . $newFileName);
                     $media->file = $newFileName;
                     $media->save();
                     $media->quickResize();
@@ -231,10 +229,10 @@ class MediaManagerController extends BaseAdministrationController
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         if (\Request::has('checked')) {
             foreach (\Request::input('checked') as $id) {
                 $media = MediaManager::findOrFail($id);

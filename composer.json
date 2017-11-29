@@ -19,6 +19,7 @@
   },
   "homepage": "http://provision.bg",
   "require": {
+    "provision/administration": "v5.5.x-dev"
   },
   "autoload": {
     "psr-4": {
@@ -41,5 +42,7 @@
       "aliases": {
       }
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
