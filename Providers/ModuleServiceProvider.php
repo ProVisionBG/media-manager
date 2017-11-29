@@ -31,7 +31,7 @@ class ModuleServiceProvider extends ServiceProvider {
         ], 'public');
 
         $this->publishes([
-            __DIR__ . '/Config/media-manager.php' => config_path('media-manager.php'),
+            __DIR__ . '/../Config/media-manager.php' => config_path('media-manager.php'),
         ], 'config');
 
         \ProVision\Administration\Administration::bootModule('media-manager', Administration::class);
