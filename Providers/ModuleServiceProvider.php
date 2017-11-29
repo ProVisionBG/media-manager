@@ -50,7 +50,7 @@ class ModuleServiceProvider extends ServiceProvider {
     public function register() {
 
         $this->mergeConfigFrom(
-            __DIR__ . '../Config/media-manager.php', 'media-manager'
+            __DIR__ . '/../Config/media-manager.php', 'media-manager'
         );
 
         $this->commands([
