@@ -166,7 +166,7 @@ class MediaManager extends Model {
             }
         }
 
-        return asset($path . $this->file);
+        return $this->storageDisk->url($path . $this->file);
     }
 
     /**
