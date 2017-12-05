@@ -46,12 +46,12 @@ class MediaResize extends Command {
                     /*
                      * remove old sizes
                      */
-                    $filesInDirectory = $media->storageDisk->files(realpath($m->path));
+                    $filesInDirectory = $media->getStorageDisk()->files(realpath($m->path));
                     if (!empty($filesInDirectory)) {
                         foreach ($filesInDirectory as $file) {
                             //дали е размер или оригинал? - запазваме оригинала
                             if (strstr(basename($file), '_')) {
-                                $media->storageDisk->delete($file);
+                                $media->getStorageDisk()->delete($file);
                             }
                         }
                     }

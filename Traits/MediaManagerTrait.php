@@ -52,11 +52,11 @@ trait MediaManagerTrait {
         /*
          * exists?
          */
-        if (!$media->storageDisk->exists($file)) {
+        if (!$media->getStorageDisk()->exists($file)) {
             return false;
         }
 
-        $imageContent = $media->storageDisk->get($file);
+        $imageContent = $media->getStorageDisk()->get($file);
 
         /*
          * Дали е картинка?
@@ -80,7 +80,7 @@ trait MediaManagerTrait {
             $c->aspectRatio();
             $c->upsize();
         })->stream('jpg', 90);
-        $media->storageDisk->put($media->path . DIRECTORY_SEPARATOR . '_' . basename($file), $image->getContents());
+        $media->getStorageDisk()->put($media->path . DIRECTORY_SEPARATOR . '_' . basename($file), $image->getContents());
 
         $sizes = config('provision_administration.image_sizes');
 
@@ -115,7 +115,7 @@ trait MediaManagerTrait {
                 }
             })->stream('jpg', 90);
 
-            $media->storageDisk->put($media->path . DIRECTORY_SEPARATOR . $key . '_' . basename($file), $imageResized->getContents());
+            $media->getStorageDisk()->put($media->path . DIRECTORY_SEPARATOR . $key . '_' . basename($file), $imageResized->getContents());
         }
 
         return true;

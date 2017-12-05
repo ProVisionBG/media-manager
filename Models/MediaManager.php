@@ -30,11 +30,6 @@ class MediaManager extends Model {
     ];
     public $table = 'media_manager';
 
-    /**
-     * @var FilesystemAdapter
-     */
-    public $storageDisk;
-
     protected $appends = [
         'path'
     ];
@@ -44,22 +39,6 @@ class MediaManager extends Model {
     protected $casts = [
         'is_image' => 'boolean'
     ];
-
-    public function __construct(array $attributes = []) {
-        parent::__construct($attributes);
-
-        $this->setStorageDisk();
-    }
-
-    /**
-     * @param string $disk
-     */
-    public function setStorageDisk($disk = null) {
-        if (empty($disk)) {
-            $disk = config('media-manager.default_file_system_disk');
-        }
-        $this->storageDisk = Storage::disk($disk);
-    }
 
     public static function boot() {
 
@@ -137,6 +116,18 @@ class MediaManager extends Model {
     }
 
     /**
+     * @param string $disk
+     *
+     * @return FilesystemAdapter
+     */
+    public function getStorageDisk($disk = null) {
+        if (empty($disk)) {
+            $disk = config('media-manager.default_file_system_disk');
+        }
+        return Storage::disk($disk);
+    }
+
+    /**
      * @return string
      */
     public function getPathAttribute() {
@@ -173,7 +164,7 @@ class MediaManager extends Model {
             }
         }
 
-        return $this->storageDisk->url($path . $this->file);
+        return $this->getStorageDisk()->url($path . $this->file);
     }
 
     /**

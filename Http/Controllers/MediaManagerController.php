@@ -90,10 +90,10 @@ class MediaManagerController extends BaseAdministrationController {
         $pathInfo = pathinfo($file->getClientOriginalName());
         $newFileName = str_slug($pathInfo['filename']) . '.' . $pathInfo['extension'];
 
-        $media->storageDisk->putFileAs($media->path, $file, $newFileName);
+        $media->getStorageDisk()->putFileAs($media->path, $file, $newFileName);
 
         $media->file = $newFileName;
-        $media->mime_type = $media->storageDisk->mimeType($media->path . $media->file);
+        $media->mime_type = $media->getStorageDisk()->mimeType($media->path . $media->file);
 
         $media->save();
 
@@ -181,16 +181,16 @@ class MediaManagerController extends BaseAdministrationController {
 
                 $media = MediaManager::findOrFail($id);
 
-                $files = $media->storageDisk->files($media->path);
+                $files = $media->getStorageDisk()->files($media->path);
                 if ($files) {
                     //remove cached files
                     foreach ($files as $file) {
                         if (realpath($file) != realpath($media->path . $media->file)) {
-                            $media->storageDisk->delete($file);
+                            $media->getStorageDisk()->delete($file);
                         }
                     }
                     //rename original file
-                    $media->storageDisk->move(realpath($media->path . $media->file), $media->path . $newFileName);
+                    $media->getStorageDisk()->move(realpath($media->path . $media->file), $media->path . $newFileName);
                     $media->file = $newFileName;
                     $media->save();
                     $media->quickResize();
