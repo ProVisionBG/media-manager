@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2017. ProVision Media Group Ltd. <http://provision.bg>
+ * Venelin Iliev <http://veneliniliev.com>
+ */
+
 var elixir = require('laravel-elixir');
 var autoprefixer = require('gulp-autoprefixer');
 var shell = require("gulp-shell");

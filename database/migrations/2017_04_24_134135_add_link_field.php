@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright (c) 2017. ProVision Media Group Ltd. <http://provision.bg>
+ * Venelin Iliev <http://veneliniliev.com>
+ */
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;

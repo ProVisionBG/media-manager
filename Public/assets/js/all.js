@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2017. ProVision Media Group Ltd. <http://provision.bg>
+ * Venelin Iliev <http://veneliniliev.com>
+ */
+
 (function () {
 
     $('body').on('click', 'button.media-manager', mediaManagerRun);

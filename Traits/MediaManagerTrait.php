@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright (c) 2017. ProVision Media Group Ltd. <http://provision.bg>
+ * Venelin Iliev <http://veneliniliev.com>
+ */
 
 /*
  * ProVision Administration, http://ProVision.bg
@@ -8,6 +12,7 @@
 namespace ProVision\MediaManager\Traits;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
+use ProVision\MediaManager\Events\ResizedEvent;
 use ProVision\MediaManager\Models\MediaManager;
 
 trait MediaManagerTrait {
@@ -44,6 +49,7 @@ trait MediaManagerTrait {
      * @param MediaManager $media
      *
      * @return bool
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function resize(MediaManager $media) {
 
@@ -117,6 +123,8 @@ trait MediaManagerTrait {
 
             $media->getStorageDisk()->put($media->path . DIRECTORY_SEPARATOR . $key . '_' . basename($file), $imageResized->getContents());
         }
+
+        event(new ResizedEvent($media));
 
         return true;
     }
