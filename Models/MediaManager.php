@@ -14,6 +14,7 @@ namespace ProVision\MediaManager\Models;
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use ProVision\MediaManager\Traits\MediaManagerTrait;
 
@@ -48,7 +49,7 @@ class MediaManager extends Model {
 
         static::deleting(function ($model) {
 
-            $disk = Storage::disk(config('media-manager.default_file_system_disk'));
+            $disk = $model->getStorageDisk();
 
             /**
              * Изтрива файловете 1 по 1 - за GCS
@@ -67,7 +68,7 @@ class MediaManager extends Model {
         static::saving(function ($model) {
             if ($model->id) {
                 //automatic create directories structure
-                $disk = Storage::disk(config('media-manager.default_file_system_disk'));
+                $disk = $model->getStorageDisk();
                 if (!$disk->exists($model->path)) {
                     $disk->makeDirectory($model->path);
                 }
@@ -76,18 +77,22 @@ class MediaManager extends Model {
 
         static::saved(function ($model) {
 
-            $disk = Storage::disk(config('media-manager.default_file_system_disk'));
+            $disk = $model->getStorageDisk();
 
             //automatic create directories structure
             if (!$disk->exists($model->path)) {
                 $disk->makeDirectory($model->path);
             }
 
-            /**
-             * Сваляне на файл - ако бъде подаден като ->file = url
-             */
-            if (filter_var($model->file, FILTER_VALIDATE_URL)) {
-
+            if ($model->file instanceof UploadedFile) {
+                /**
+                 * Ако е от файл ъплоад
+                 */
+                $disk->putFileAs($model->path, $model->file, $model->file->getClientOriginalName());
+                $model->file = $model->file->getClientOriginalName();
+                $model->save();
+                $model->quickResize();
+            } elseif (filter_var($model->file, FILTER_VALIDATE_URL)) {
                 /*
                  * Сваляне на файла с cURL
                  */
@@ -117,18 +122,6 @@ class MediaManager extends Model {
         });
 
         parent::boot();
-    }
-
-    /**
-     * @param string $disk
-     *
-     * @return FilesystemAdapter
-     */
-    public function getStorageDisk($disk = null) {
-        if (empty($disk)) {
-            $disk = config('media-manager.default_file_system_disk');
-        }
-        return Storage::disk($disk);
     }
 
     /**
@@ -169,6 +162,18 @@ class MediaManager extends Model {
         }
 
         return $this->getStorageDisk()->url($path . $this->file);
+    }
+
+    /**
+     * @param string $disk
+     *
+     * @return FilesystemAdapter
+     */
+    public function getStorageDisk($disk = null) {
+        if (empty($disk)) {
+            $disk = config('media-manager.default_file_system_disk');
+        }
+        return Storage::disk($disk);
     }
 
     /**
