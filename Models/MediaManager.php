@@ -54,7 +54,7 @@ class MediaManager extends Model {
             /**
              * Изтрива файловете 1 по 1 - за GCS
              */
-            if ($files = $disk->files($model->path)) {
+            if ($files = $disk->allFiles($model->path)) {
                 $disk->delete($files);
                 $disk->deleteDirectory($model->path);
             }
