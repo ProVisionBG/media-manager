@@ -56,7 +56,6 @@ class MediaManager extends Model {
              */
             if ($files = $disk->allFiles($model->path)) {
                 $disk->delete($files);
-                $disk->deleteDirectory($model->path);
             }
 
             if ($disk->exists($model->path)) {
