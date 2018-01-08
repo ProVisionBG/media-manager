@@ -53,7 +53,7 @@ trait MediaManagerTrait {
      */
     public function resize(MediaManager $media) {
 
-        $file = $media->path . DIRECTORY_SEPARATOR . $media->file;
+        $file = $media->path . $media->file;
 
         /*
          * exists?
@@ -86,7 +86,7 @@ trait MediaManagerTrait {
             $c->aspectRatio();
             $c->upsize();
         })->stream('jpg', 90);
-        $media->getStorageDisk()->put($media->path . DIRECTORY_SEPARATOR . '_' . basename($file), $image->getContents());
+        $media->getStorageDisk()->put($media->path  . '_' . basename($file), $image->getContents());
 
         $sizes = config('provision_administration.image_sizes');
 
@@ -121,7 +121,7 @@ trait MediaManagerTrait {
                 }
             })->stream('jpg', 90);
 
-            $media->getStorageDisk()->put($media->path . DIRECTORY_SEPARATOR . $key . '_' . basename($file), $imageResized->getContents());
+            $media->getStorageDisk()->put($media->path . $key . '_' . basename($file), $imageResized->getContents());
         }
 
         event(new ResizedEvent($media));
