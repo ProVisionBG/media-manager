@@ -89,6 +89,7 @@ class MediaManager extends Model {
                  */
                 $disk->putFileAs($model->path, $model->file, $model->file->getClientOriginalName());
                 $model->file = $model->file->getClientOriginalName();
+                $model->mime_type = $model->getStorageDisk()->mimeType($model->file->getClientOriginalName());
                 $model->save();
                 $model->quickResize();
             } elseif (filter_var($model->file, FILTER_VALIDATE_URL)) {
@@ -104,6 +105,7 @@ class MediaManager extends Model {
                 $fileSavePath = $model->path . basename($model->file);
                 $disk->put($fileSavePath, $contents);
                 $model->file = basename($fileSavePath);
+                $model->mime_type = $model->getStorageDisk()->mimeType($fileSavePath);
                 $model->save();
                 $model->quickResize();
             } elseif (file_exists($model->file)) {
@@ -114,6 +116,7 @@ class MediaManager extends Model {
                 $fileSavePath = $model->path . basename($model->file);
                 $disk->put($fileSavePath, $contents);
                 $model->file = basename($fileSavePath);
+                $model->mime_type = $model->getStorageDisk()->mimeType($fileSavePath);
                 $model->save();
                 $model->quickResize();
             }
