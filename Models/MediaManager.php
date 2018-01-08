@@ -56,9 +56,6 @@ class MediaManager extends Model {
              */
             if ($files = $disk->allFiles($model->path)) {
                 $disk->delete($files);
-            }
-
-            if ($disk->exists($model->path)) {
                 $disk->deleteDirectory($model->path);
             }
 
@@ -87,9 +84,9 @@ class MediaManager extends Model {
                 /**
                  * Ако е от файл ъплоад
                  */
-                $disk->putFileAs($model->path, $model->file, $model->file->getClientOriginalName());
+                $fileFullPath = $disk->putFileAs($model->path, $model->file, $model->file->getClientOriginalName());
                 $model->file = $model->file->getClientOriginalName();
-                $model->mime_type = $model->getStorageDisk()->mimeType($model->file->getClientOriginalName());
+                $model->mime_type = $model->getStorageDisk()->mimeType($fileFullPath);
                 $model->save();
                 $model->quickResize();
             } elseif (filter_var($model->file, FILTER_VALIDATE_URL)) {
