@@ -2,4 +2,5 @@
     {!! form($form) !!}
 
     @stack('js_scripts')
+    @stack('bottom_js')
 </div>
