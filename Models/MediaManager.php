@@ -17,9 +17,10 @@ use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use ProVision\MediaManager\Traits\MediaManagerTrait;
+use Rutorika\Sortable\SortableTrait;
 
 class MediaManager extends Model {
-    use \Rutorika\Sortable\SortableTrait, Translatable, MediaManagerTrait;
+    use SortableTrait, Translatable, MediaManagerTrait;
 
     protected static $sortableGroupField = [
         'mediaable_type',

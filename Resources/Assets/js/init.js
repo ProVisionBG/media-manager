@@ -156,14 +156,34 @@
             }
             itemsContainer.sortable({
                 cancel: '.callout', //да не може да се драгва съобщението за липсващи елементи
-                update: function (e, ui) {
+                update: function (a, b) {
+
+                    var $sorted = b.item;
+
+                    var $previous = $sorted.prev();
+                    var $next = $sorted.next();
+
+                    if ($previous.length > 0) {
+                        var postData = {
+                            type: 'sort',
+                            sortType: 'moveAfter',
+                            positionEntityId: $previous.data('id')
+                        };
+                    } else if ($next.length > 0) {
+                        var postData = {
+                            type: 'sort',
+                            sortType: 'moveBefore',
+                            positionEntityId: $next.data('id')
+                        };
+                    } else {
+                        alert('MediaManager: Something wrong!');
+                        return;
+                    }
+
                     $.ajax({
                         type: "PUT",
-                        url: config.routes.index + '/' + ui.item.attr('data-id'),
-                        data: {
-                            'type': 'sort',
-                            'before_id': ui.item.next().attr('data-id')
-                        },
+                        url: config.routes.index + '/' + b.item.data('id'),
+                        data: postData,
                         success: function (data) {
                             //code on success
                         },
@@ -173,6 +193,7 @@
                     });
                 }
             });
+
             itemsContainer.disableSelection();
 
             /*

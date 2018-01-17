@@ -149,33 +149,18 @@ class MediaManagerController extends BaseAdministrationController {
     public function update(Request $request, $id) {
         if ($request->has('type')) {
             if ($request->input('type') == 'sort') {
-                /*
-                 * save sort
-                 */
+
                 $media = MediaManager::findOrFail($id);
+                $entityMedia = MediaManager::findOrFail($request->positionEntityId);
 
-                if ($request->has('before_id')) {
-                    $next = MediaManager::findOrFail($request->input('before_id'));
-                    $media->moveBefore($next);
+                if ($request->sortType == 'moveAfter') {
+                    $media->moveAfter($entityMedia);
                 } else {
-                    $prev = MediaManager::orderBy('order_index', 'desc')
-                        ->where('mediaable_type', $media->mediaable_type);
-
-                    if (!empty($media->mediaable_sub_type)) {
-                        $prev->where('mediaable_sub_type', $media->mediaable_sub_type);
-                    }
-
-                    $prev->where('mediaable_id', $media->mediaable_id)
-                        ->first();
-
-                    if (!$prev) {
-                        return Response::json(['Not found preview media manager object'], 500);
-                    }
-
-                    $media->moveAfter($prev);
+                    $media->moveBefore($entityMedia);
                 }
 
                 return Response::json(['ok'], 200);
+
             } elseif ($request->input('type') == 'rename' && $request->has('name')) {
                 /*
                  * rename file
