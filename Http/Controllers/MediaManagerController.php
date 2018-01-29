@@ -85,7 +85,7 @@ class MediaManagerController extends BaseAdministrationController {
         $media->mediaable_type = $request->mediaable_type;
         $media->user_id = Auth::guard(Config::get('provision_administration.guard'))->user()->id;
 
-        if ($request->has('mediaable_sub_type') && !empty($request->mediaable_sub_type) && $request->mediaable_sub_type != 'null') {
+        if ($request->filled('mediaable_sub_type') && !empty($request->mediaable_sub_type) && $request->mediaable_sub_type != 'null') {
             $media->mediaable_sub_type = $request->mediaable_sub_type;
         }
 
