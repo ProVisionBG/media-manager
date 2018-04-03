@@ -9,7 +9,7 @@
  * Author: Venelin Iliev, http://veneliniliev.com
  */
 
-namespace ProVision\VisualBuilder\Providers;
+namespace ProVision\MediaManager\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -23,7 +23,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'ProVision\VisualBuilder\Http\Controllers';
+    protected $namespace = 'ProVision\MediaManager\Http\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, etc.
