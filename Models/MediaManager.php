@@ -176,6 +176,21 @@ class MediaManager extends Model {
     }
 
     /**
+     * Връща пътя до картинката през intervention/imagecache
+     *
+     * @param string $template
+     *
+     * @return string
+     */
+    public function getPublicCachePath($template = 'original') {
+        $path = str_ireplace('\\', '/', $this->path);
+        return route('imagecache', [
+            'template' => $template,
+            'filename' => $path . $this->file
+        ]);
+    }
+
+    /**
      * quick resize media item
      */
     public function quickResize() {
