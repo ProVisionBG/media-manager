@@ -37,6 +37,7 @@ class ItemForm extends AdminForm
             'label' => trans('media-manager::admin.edit-form.visible'),
             'value' => 1,
             'default_checked' => true,
+            'default_value' => 1,
             'translate' => true,
             'help_block' => [
                 'text' => trans('media-manager::admin.edit-form.visible-help')
