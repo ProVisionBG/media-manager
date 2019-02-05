@@ -6,14 +6,13 @@
 
     <div class="img">
         @if($item->is_image)
-            <img title="{{$item->file}}" src="{{$item->getPublicPath('_')}}"/>
+            <img title="{{$item->file}}" src="{{$item->getPublicPath('_')}}?time={{time()}}"/>
         @else
             <div class="file-icon file-icon-xl" title="{{$item->file}}"
                  data-type="{{\File::extension($item->file)}}"></div>
         @endif
         <input type="checkbox" name="selected[]" value="{{$item->id}}"/>
     </div>
-
 
     <div class="btn-group-vertical">
         <button type="button" class="btn btn-default btn-drag"><i class="fa fa-arrows"></i></button>
@@ -29,6 +28,8 @@
                 {{--<li><a href="#"><i class="fa fa-pencil-square-o"></i> Редактирай</a></li>--}}
                 <li><a href="#" class="file-rename"><i class="fa fa-pencil-square-o"></i> Преименувай файла</a></li>
                 <li><a href="#" class="edit-visibility"><i class="fa fa-eye-slash"></i> Описание / Видимост</a></li>
+                <li><a href="#" class="rotate" data-angle="-90"><i class="fa fa-repeat"></i> Завъртане 90°</a></li>
+                <li><a href="#" class="rotate" data-angle="90"><i class="fa fa-undo"></i> Завъртане -90°</a></li>
                 <li><a href="#"><i class="fa fa-code"></i> Код за вграждане</a></li>
             </ul>
         </div>

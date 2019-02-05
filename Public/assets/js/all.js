@@ -277,6 +277,37 @@
             });
 
             /*
+            Rotate
+             */
+            itemsContainer.on('click', '.media-item a.rotate', function (e) {
+                e.preventDefault();
+
+                var $this = $(this);
+                var elementRow = $this.closest('.media-item').data('row');
+
+                $.ajax({
+                    type: "PUT",
+                    url: config.routes.index + '/' + elementRow.id,
+                    data: {
+                        type: 'rotate',
+                        angle: $this.data('angle')
+                    },
+                    success: function (data) {
+                        /*
+                         @todo: да презареди само елемента който е бутан!
+                         */
+                        loadItem(elementRow.id);
+                    },
+                    error: function (data) {
+                        $.alert({
+                            title: 'Error rotate!',
+                            content: data,
+                        });
+                    }
+                });
+            });
+
+            /*
              edit description & visibility
              */
             itemsContainer.on('click', '.media-item a.edit-visibility', function (e) {

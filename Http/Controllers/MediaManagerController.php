@@ -139,9 +139,10 @@ class MediaManagerController extends BaseAdministrationController {
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param  int $id
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function update(Request $request, $id) {
         if ($request->has('type')) {
@@ -205,10 +206,34 @@ class MediaManagerController extends BaseAdministrationController {
                 $media->save();
 
                 return Response::json(['ok'], 200);
+            } elseif ($request->input('type') == 'rotate' && $request->has('angle')) {
+                /** @var MediaManager $media */
+                $media = MediaManager::findOrFail($id);
+                $file = $media->path . $media->file;
+
+                /*
+                 * exists?
+                */
+                if (!$media->getStorageDisk()->exists($file)) {
+                    return Response::json(['Image not exists', $file], 500);
+                }
+
+                $imageContent = $media->getStorageDisk()->get($file);
+
+                try {
+                    $imageMake = \Intervention\Image\Facades\Image::make($imageContent);
+                } catch (\Exception $exception) {
+                    return Response::json(['Image make error', $exception->getMessage()], 500);
+                }
+                $image = $imageMake->rotate($request->input('angle'))->stream('jpg');
+                $media->getStorageDisk()->put($file, $image->getContents());
+                $media->quickResize();
+
+                return Response::json(['ok',$file], 200);
             }
         }
 
-        return Response::json(['Unknown update action'], 500);
+        return Response::json(['Unknown type/update action'], 500);
     }
 
     /**
