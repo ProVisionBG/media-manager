@@ -80,6 +80,8 @@ class MediaManager extends Model {
                 curl_setopt($ch, CURLOPT_URL, $model->file);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+                curl_setopt($ch,CURLOPT_SSL_VERIFYHOST, FALSE);
                 $contents = curl_exec($ch);
                 curl_close($ch);
 
